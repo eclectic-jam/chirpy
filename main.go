@@ -34,7 +34,6 @@ func ready(w http.ResponseWriter, req *http.Request) {
 func (cfg *apiConfig) middlewareMetricsInc(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		cfg.fileserverHits += 1
-		fmt.Printf("Hits: %d\n", cfg.fileserverHits)
 		next.ServeHTTP(w, r)
 	})
 }
@@ -42,14 +41,12 @@ func (cfg *apiConfig) middlewareMetricsInc(next http.Handler) http.Handler {
 func (cfg *apiConfig) hitsHandler(w http.ResponseWriter, req *http.Request) {
 	w.WriteHeader(http.StatusOK)
 
-	fmt.Printf("metrics hit, hits = %d\n", cfg.fileserverHits)
 	io.WriteString(w, fmt.Sprintf("Hits: %d", cfg.fileserverHits))
 	return
 }
 
 func (cfg *apiConfig) resetHits(w http.ResponseWriter, req *http.Request) {
 	cfg.fileserverHits = 0
-	fmt.Printf("fileserverHits reset to 0\n")
 	w.WriteHeader(http.StatusOK)
 	return
 }
